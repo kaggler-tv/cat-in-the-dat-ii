@@ -1,0 +1,9 @@
+numpy
+scipy
+pandas
+lightgbm
+keras
+cython
+h5py
+kaggle
+kaggler
