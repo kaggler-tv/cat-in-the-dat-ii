@@ -2,8 +2,10 @@ include Makefile
 
 FEATURE_NAME := esb1
 
-BASE_MODELS := lgb1_j1 \
-	           lgb2_j1
+BASE_MODELS := lgb2_j2 \
+	           autolgb_j2 \
+	           lgb2_j1 \
+			   lgb1_j1
 
 PREDICTS_TRN := $(foreach m, $(BASE_MODELS), $(DIR_VAL)/$(m).val.yht)
 PREDICTS_TST := $(foreach m, $(BASE_MODELS), $(DIR_TST)/$(m).tst.yht)

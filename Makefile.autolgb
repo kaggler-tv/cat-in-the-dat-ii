@@ -1,14 +1,7 @@
 include Makefile.feature.esb1
 
-N = 10000
-N_LEAF = 128
-LRATE = 0.05
-N_MIN = 25
-SUBCOL = 0.5
-SUBROW = 0.7
-SUBROW_FREQ = 1
 N_STOP = 20
-ALGO_NAME := lgb2
+ALGO_NAME := autolgb
 MODEL_NAME := $(ALGO_NAME)_$(FEATURE_NAME)
 
 METRIC_VAL := $(DIR_METRIC)/$(MODEL_NAME).val.txt
@@ -27,17 +20,10 @@ retrain: clean_$(ALGO_NAME) submission
 
 $(PREDICT_TST) $(PREDICT_VAL): $(FEATURE_TRN) $(FEATURE_TST) \
                                    | $(DIR_VAL) $(DIR_TST)
-	./src/train_predict_lgb1.py --train-file $< \
+	./src/train_predict_autolgb.py --train-file $< \
                               --test-file $(word 2, $^) \
                               --predict-valid-file $(PREDICT_VAL) \
                               --predict-test-file $(PREDICT_TST) \
-                              --n-est $(N) \
-                              --n-leaf $(N_LEAF) \
-                              --lrate $(LRATE) \
-                              --n-min $(N_MIN) \
-                              --subcol $(SUBCOL) \
-                              --subrow $(SUBROW) \
-                              --subrow-freq $(SUBROW_FREQ) \
                               --early-stop $(N_STOP)
 
 $(SUBMISSION_TST_GZ): $(SUBMISSION_TST)
