@@ -1,0 +1,41 @@
+include Makefile.feature.e1
+
+ALGO_NAME := logreg
+C := 1.0
+REGULARIZER := l2
+CLASS_WEIGHT := balanced
+SOLVER := lbfgs
+MODEL_NAME := $(FEATURE_NAME)_$(ALGO_NAME)_$(REGULARIZER)_$(C)
+METRIC_VAL := $(DIR_METRIC)/$(MODEL_NAME).val.txt
+
+PREDICT_VAL := $(DIR_VAL)/$(MODEL_NAME).val.yht
+PREDICT_TST := $(DIR_TST)/$(MODEL_NAME).tst.yht
+SUBMISSION_TST := $(DIR_SUB)/$(MODEL_NAME)_sub.csv
+
+all: validation submission
+validation: $(METRIC_VAL)
+submission: $(SUBMISSION_TST)
+retrain: clean_$(ALGO_NAME) submission
+
+$(PREDICT_TST) $(PREDICT_VAL): $(FEATURE_TRN) $(FEATURE_TST) $(CV_ID) | $(DIR_VAL) $(DIR_TST)
+	python ./src/train_predict_logreg1.py --train-feature-file $< \
+                                         --test-feature-file $(word 2, $^) \
+                                         --predict-valid-file $(PREDICT_VAL) \
+                                         --predict-test-file $(PREDICT_TST) \
+                                         --C $(C) \
+                                         --regularizer $(REGULARIZER) \
+                                         --class_weight $(CLASS_WEIGHT) \
+                                         --solver $(SOLVER) \
+                                         --retrain
+
+$(METRIC_VAL): $(PREDICT_VAL) $(Y_TRN) | $(DIR_METRIC)
+	python ./src/evaluate.py --predict-file $< \
+                             --target-file $(lastword $^) > $@
+	cat $@
+
+$(SUBMISSION_TST): $(PREDICT_TST) $(HEADER) $(ID_TST) | $(DIR_SUB)
+	paste -d, $(lastword $^) $< > $@.tmp
+	cat $(word 2, $^) $@.tmp > $@
+	rm $@.tmp
+
+.DEFAULT_GOAL := all
