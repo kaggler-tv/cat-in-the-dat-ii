@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from __future__ import division
 import argparse
 import logging
 import numpy as np
@@ -8,7 +7,7 @@ import pandas as pd
 import time
 
 from kaggler.data_io import load_data, save_data
-from kaggler.preprocessing import LabelEncoder
+from kaggler.preprocessing import OneHotEncoder
 
 # ref: https://www.kaggle.com/cuijamm/simple-onehot-logisticregression-score-0-80801
 def generate_feature(train_file, test_file, train_feature_file,
@@ -24,8 +23,8 @@ def generate_feature(train_file, test_file, train_feature_file,
     logging.info('trn_shape:{}, tst_shape: {}, all shape: {}'.format(trn.shape, tst.shape, trn_tst.shape))
 
     logging.info('One Hot Encoding categorical variables')
-    trn_tst_ohe = pd.get_dummies(trn_tst, columns=trn_tst.columns, sparse=True)
-    trn_tst_ohe = trn_tst_ohe.sparse.to_coo()
+    ohe = trn_tst_ohe = OneHotEncoder(min_obs=1)
+    trn_tst_ohe = ohe.fit_transform(trn_tst)
     trn_tst_ohe = trn_tst_ohe.tocsr()
     logging.info(f'shape of all data after OHE: {trn_tst_ohe.shape}')
 

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-
-from __future__ import division
-from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import mean_absolute_error as MAE
 
 import argparse
@@ -36,7 +34,7 @@ def train_predict(train_feature_file, test_feature_file,
     X_tst, _ = load_data(test_feature_file)
 
     logging.info('Loading CV Ids')
-    cv = KFold(n_splits=N_FOLD, shuffle=True, random_state=SEED).split(X)
+    cv = StratifiedKFold(n_splits=N_FOLD, shuffle=True, random_state=SEED).split(X, y)
 
     p_val = np.zeros(X.shape[0])
     p_tst = np.zeros(X_tst.shape[0]) 
