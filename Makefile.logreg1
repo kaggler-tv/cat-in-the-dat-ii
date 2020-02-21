@@ -1,4 +1,4 @@
-include Makefile.feature.e1
+include Makefile.feature.esb2
 
 ALGO_NAME := logreg
 C := 1.0
@@ -16,6 +16,9 @@ all: validation submission
 validation: $(METRIC_VAL)
 submission: $(SUBMISSION_TST)
 retrain: clean_$(ALGO_NAME) submission
+
+submit: $(SUBMISSION_TST)
+	kaggle competitions submit -c $(COMPETITION) -f $< -m $(MODEL_NAME)
 
 $(PREDICT_TST) $(PREDICT_VAL): $(FEATURE_TRN) $(FEATURE_TST) $(CV_ID) | $(DIR_VAL) $(DIR_TST)
 	python ./src/train_predict_logreg1.py --train-feature-file $< \
