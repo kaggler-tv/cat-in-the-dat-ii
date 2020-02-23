@@ -5,7 +5,7 @@ Demo video is available on [YouTube](https://youtu.be/861NAO5-XJo)
 - Comments are available in the subtitle. Please turn on the subtitle.
 - Kaggler pipeline template: https://github.com/jeongyoonlee/kaggler-template
 - GitHub repo used in the demo: https://github.com/jeongyoonlee/cat-in-the-dat-ii
-- Blog post about the pipeline: http://kaggler.com/2015/09/21/kagglers-toolbox.html
+- Blog post about the pipeline: http://kaggler.com/2020/02/19/kaggler-pipeline.html
 
 Made by Kagglers, for Kagglers.
 
