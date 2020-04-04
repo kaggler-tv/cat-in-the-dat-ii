@@ -1,4 +1,4 @@
-include Makefile.feature.esb1
+include Makefile.feature.j2
 
 N = 10000
 N_LEAF = 128
@@ -24,6 +24,9 @@ all: validation submission
 validation: $(METRIC_VAL)
 submission: $(SUBMISSION_TST)
 retrain: clean_$(ALGO_NAME) submission
+
+submit: $(SUBMISSION_TST)
+	kaggle competitions submit -c $(COMPETITION) -f $< -m $(MODEL_NAME)
 
 $(PREDICT_TST) $(PREDICT_VAL): $(FEATURE_TRN) $(FEATURE_TST) \
                                    | $(DIR_VAL) $(DIR_TST)
